@@ -1,0 +1,42 @@
+{
+  "name": "@mirum7/fn",
+  "version": "1.0.0",
+  "description": "A collection of useful functions.",
+  "module": "dist/index.js",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "bun-build && bunx --bun tsc",
+    "prepublishOnly": "bun run build"
+  },
+  "types": "types/index.d.ts",
+  "files": [
+    "types/**/*.d.ts",
+    "dist/index.js"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./types/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "bun",
+    "build",
+    "functions",
+    "typescript"
+  ],
+  "type": "module",
+  "private": false,
+  "author": "mirum7",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@mirum7/bun-build": "^1.4.4",
+    "@types/bun": "^1.2.23"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
