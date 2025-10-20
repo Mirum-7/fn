@@ -1,2 +1,6 @@
 export { combine } from "./combine";
-export { debounce } from "./debounce";
+export {
+  debounce,
+  type Props as DebounceProps,
+  type ReturnProps as DebounceReturnProps,
+} from "./debounce";

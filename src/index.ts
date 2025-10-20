@@ -1,1 +1,6 @@
-export { combine, debounce } from "./functions";
+export {
+  combine,
+  debounce,
+  type DebounceProps,
+  type DebounceReturnProps,
+} from "./functions";

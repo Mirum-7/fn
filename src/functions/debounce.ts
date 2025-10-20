@@ -1,4 +1,4 @@
-interface Props<TArgs extends unknown[] = unknown[]> {
+export interface Props<TArgs extends unknown[] = unknown[]> {
   fn: (...args: TArgs) => void;
   /**
    * @default 1000
@@ -6,7 +6,7 @@ interface Props<TArgs extends unknown[] = unknown[]> {
   wait?: number;
 }
 
-interface ReturnProps<TArgs extends unknown[] = unknown[]> {
+export interface ReturnProps<TArgs extends unknown[] = unknown[]> {
   fn: (...args: TArgs) => void;
   clear: () => void;
 }
