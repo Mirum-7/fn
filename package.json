@@ -1,12 +1,13 @@
 {
   "name": "@mirum7/fn",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A collection of useful functions.",
   "module": "dist/index.js",
   "main": "src/index.ts",
   "scripts": {
     "build": "bun-build && bunx --bun tsc",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "test": "test --coverage"
   },
   "types": "types/index.d.ts",
   "files": [

@@ -1,5 +1,5 @@
 export interface Props<TArgs extends unknown[] = unknown[]> {
-  fn: (...args: TArgs) => void;
+  fn: (...args: TArgs) => Promise<void> | void;
   /**
    * @default 1000
    */
@@ -7,7 +7,7 @@ export interface Props<TArgs extends unknown[] = unknown[]> {
 }
 
 export interface ReturnProps<TArgs extends unknown[] = unknown[]> {
-  fn: (...args: TArgs) => void;
+  fn: (...args: TArgs) => Promise<void>;
   clear: () => void;
 }
 
@@ -25,9 +25,12 @@ export const debounce = <TArgs extends unknown[] = unknown[]>(
   const fn = (...args: TArgs) => {
     clear();
 
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, wait);
+    return new Promise<void>((resolve) => {
+      timeoutId = setTimeout(async () => {
+        await func(...args);
+        resolve();
+      }, wait);
+    });
   };
 
   return {

@@ -8,8 +8,7 @@ A collection of useful utility functions for TypeScript/JavaScript projects.
   - [Basic example](#basic-example)
   - [Object transformation](#object-transformation)
 - [debounce](#debounce)
-  - [Simple debouncing](#simple-debouncing)
-  - [Search debouncing](#search-debouncing)
+- [equals](#equals)
 
 ## Installation
 
@@ -55,66 +54,83 @@ console.log(getUserString("123")); // "User 123 (123)"
 
 ### `debounce()`
 
-A function for creating a debounced version of a function. Useful for limiting the frequency of function calls (e.g., for search or form validation).
+A function for creating a debounced version of a function. Useful for limiting the frequency of function calls (e.g., for search or form validation). Returns a Promise that resolves when the debounced function completes.
 
 #### Examples
-
-##### Simple debouncing
 
 ```typescript
 import { debounce } from "@mirum7/fn";
 
 const logMessage = (message: string) => {
-  console.log(`Log: ${message}`);
-};
-
-const debouncedLog = debounce({
-  fn: logMessage,
-  wait: 500, // delay in milliseconds
-});
-
-// Call the function multiple times in a row
-debouncedLog.fn("Hello");
-debouncedLog.fn("World");
-debouncedLog.fn("!"); // Only this call will execute after 500ms
-
-// You can cancel the delayed call
-debouncedLog.clear();
-```
-
-##### Search debouncing
-
-```typescript
-import { debounce } from "@mirum7/fn";
-
-const searchUsers = (query: string) => {
-  // API call to search for users
-  console.log(`Searching for: ${query}`);
+  console.log(`Processing: ${message}`);
 };
 
 const { fn, clear } = debounce({
-  fn: searchUsers,
+  fn: logMessage,
   wait: 300,
 });
 
-// In a React component
-const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  fn(event.target.value);
-};
+// Multiple calls
+fn("First"); // canceled
+fn("Second"); // canceled
+fn("Third"); // => "Third"
 
-useEffect(() => {
-  return () => {
-    clear();
-  };
-}, []);
+// Cancel call
+fn("first"); // canceled
+clear();
+
+// Multiple calls with await
+await fn("First"); // => "First"
+await fn("Second"); // => "Second"
+await fn("Third"); // => "Third"
+
+// Cancel call with await
+await fn("first"); // => "first"
+clear(); // doesn't cancel because already awaited
 ```
 
 #### Options
 
-- `fn` - function to debounce
+- `fn` - function to debounce (can be sync or async)
 - `wait` - delay in milliseconds (default: 1000)
 
 #### Returns
 
-- `fn` - debounced version of the function
+- `fn` - debounced version of the function that returns a Promise
 - `clear` - function to cancel the delayed call
+
+### `equals()`
+
+A function for deep equality comparison of multiple values. Supports primitive types, objects, and nested structures.
+
+#### Examples
+
+```typescript
+import { equals } from "@mirum7/fn";
+
+// Primitives
+console.log(equals(1, 1, 1)); // true
+console.log(equals("hello", "hello")); // true
+console.log(equals(1, 2)); // false
+
+// Objects
+const obj1 = { name: "John", age: 30 };
+const obj2 = { name: "John", age: 30 };
+console.log(equals(obj1, obj2)); // true
+
+// Arrays
+console.log(equals([1, 2, 3], [1, 2, 3])); // true
+
+// Edge cases
+console.log(equals()); // true (no arguments)
+console.log(equals(42)); // true (single argument)
+console.log(equals(1, "1")); // false (different types)
+```
+
+#### Parameters
+
+- `...elements` - any number of values to compare
+
+#### Returns
+
+- `boolean` - true if all values are deeply equal, false otherwise
