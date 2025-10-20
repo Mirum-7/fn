@@ -92,15 +92,21 @@ const searchUsers = (query: string) => {
   console.log(`Searching for: ${query}`);
 };
 
-const debouncedSearch = debounce({
+const { fn, clear } = debounce({
   fn: searchUsers,
   wait: 300,
 });
 
 // In a React component
 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  debouncedSearch.fn(event.target.value);
+  fn(event.target.value);
 };
+
+useEffect(() => {
+  return () => {
+    clear();
+  };
+}, []);
 ```
 
 #### Options
