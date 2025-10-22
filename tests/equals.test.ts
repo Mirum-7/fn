@@ -69,6 +69,8 @@ describe("equals()", () => {
     });
 
     test("false", () => {
+      expect(equals({ a: 1 }, { a: 1, b: 2 })).toBeFalse();
+
       expect(
         equals(
           { a: 1, b: { c: 2 } },

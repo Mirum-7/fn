@@ -3,22 +3,12 @@ export const equals = (...elements: unknown[]): boolean => {
     return true;
   }
 
-  const isTypeEqual = elements.every((element1, _, arr) =>
-    arr.every((element2) => typeof element2 === typeof element1)
-  );
-
-  if (!isTypeEqual) {
-    return false;
-  }
-
   if (
     ["string", "number", "bigint", "boolean", "undefined"].includes(
       typeof elements[0]
     )
   ) {
-    return elements.every((element1, _, arr) =>
-      arr.every((element2) => element1 === element2)
-    );
+    return elements.every((element) => elements[0] === element);
   }
 
   if (elements[0] === null) {
@@ -26,12 +16,21 @@ export const equals = (...elements: unknown[]): boolean => {
   }
 
   if (typeof elements[0] === "object") {
-    return (elements as Record<string, unknown>[]).every((element1, _, arr) =>
-      arr.every((element2) =>
-        Object.keys(element1).every((key) =>
-          equals(element1[key], element2[key])
-        )
-      )
+    const lengths = (elements as Record<string, unknown>[]).map(
+      (el) => Object.keys(el).length
+    );
+
+    const isLengthEqual = lengths.every((len) => len === lengths[0]);
+
+    if (!isLengthEqual) {
+      return false;
+    }
+
+    const first = elements[0] as Record<string, unknown>;
+    const firstKeys = Object.keys(first);
+
+    return (elements as Record<string, unknown>[]).every((element) =>
+      firstKeys.every((key) => equals(first[key], element[key]))
     );
   }
 
